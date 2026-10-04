@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puerto Color | Plataforma Web Empresarial (Honduras)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#0F172A',
+                            primary: '#0284C7',
+                            accent: '#F97316',
+                            teal: '#14B8A6',
+                            yellow: '#F59E0B',
+                            light: '#F8FAFC',
+                            card: '#FFFFFF'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #0284C7 0%, #14B8A6 50%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .color-splash-bg {
+            background: radial-gradient(circle at 10% 20%, rgba(2, 132, 199, 0.08) 0%, rgba(20, 184, 166, 0.05) 50%, rgba(249, 115, 22, 0.05) 100%);
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+        }
+        .pulse-mic {
+            animation: pulse-red 1.5s infinite;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        @media print {
+            body * { visibility: hidden; }
+            #invoice-modal, #invoice-modal * { visibility: visible; }
+            #invoice-modal { position: absolute; left: 0; top: 0; width: 100%; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+    <header class="sticky top-0 z-40 glass-nav border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Brand Logo & Eslogan -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchSection('inicio')">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-primary via-brand-teal to-brand-accent p-1 shadow-md flex items-center justify-center">
+                        <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
+                            <i class="fa-solid fa-fill-drip text-2xl text-brand-primary"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-extrabold tracking-tight text-slate-900 block leading-none">
+                            PUERTO <span class="text-brand-primary">COLOR</span>
+                        </span>
+                        <span class="text-[11px] font-medium text-slate-500 hidden sm:block mt-1">
+                            “Dale vida a tus espacios, nosotros ponemos el color.”
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Tab Navigation Links -->
+                <nav class="hidden lg:flex items-center space-x-1 font-semibold text-sm">
+                    <button onclick="switchSection('inicio')" id="tab-inicio" class="nav-tab px-4 py-2 rounded-xl text-brand-primary bg-sky-50 font-bold transition-all">
+                        <i class="fa-solid fa-house mr-1.5"></i> Inicio
+                    </button>
+                    <button onclick="switchSection('catalogo')" id="tab-catalogo" class="nav-tab px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
+                        <i class="fa-solid fa-boxes-stacked mr-1.5"></i> Catálogo
+                    </button>
+                    <button onclick="switchSection('asistente')" id="tab-asistente" class="nav-tab px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all relative">
+                        <i class="fa-solid fa-robot mr-1.5 text-brand-accent"></i> Asistente & Citas
+                        <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-accent"></span>
+                        </span>
+                    </button>
+                    <button onclick="switchSection('proyecto')" id="tab-proyecto" class="nav-tab px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all">
+                        <i class="fa-solid fa-graduation-cap mr-1.5"></i> Proyecto
+                    </button>
+                </nav>
+
+                <!-- Action Buttons: WhatsApp & Cart Trigger -->
+                <div class="flex items-center space-x-3">
+                    <a href="https://wa.me/50499999999?text=Hola%20Puerto%20Color,%20quisiera%20consultar%20sobre%20sus%20productos." target="_blank" class="hidden sm:flex bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-3.5 rounded-xl text-xs items-center gap-2 shadow-sm transition-all">
+                        <i class="fa-brands fa-whatsapp text-base"></i> WhatsApp
+                    </a>
+
+                    <button onclick="toggleCartModal()" class="relative bg-brand-navy hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md">
+                        <i class="fa-solid fa-cart-shopping text-brand-teal"></i>
+                        <span class="hidden sm:inline">Carrito</span>
+                        <span id="cart-badge" class="bg-brand-accent text-white text-[11px] rounded-full h-5 w-5 flex items-center justify-center font-extrabold">0</span>
+                    </button>
+
+                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-4 space-y-1 shadow-lg">
+            <button onclick="switchSection('inicio'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-house mr-2"></i> Inicio</button>
+            <button onclick="switchSection('catalogo'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-boxes-stacked mr-2"></i> Catálogo</button>
+            <button onclick="switchSection('asistente'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-robot mr-2 text-brand-accent"></i> Asistente Virtual & Citas</button>
+            <button onclick="switchSection('proyecto'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-50"><i class="fa-solid fa-graduation-cap mr-2"></i> Proyecto Académico</button>
+            <a href="https://wa.me/50499999999" target="_blank" class="block px-3 py-2 rounded-lg text-sm font-bold text-emerald-600 bg-emerald-50"><i class="fa-brands fa-whatsapp mr-2"></i> Contactar por WhatsApp</a>
+        </div>
+    </header>
+
+    <main id="main-content" class="flex-grow">
+        <section id="sec-inicio" class="view-section color-splash-bg py-12 lg:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+                <!-- Hero Banner -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 border border-orange-200 text-brand-accent text-xs font-bold">
+                            <i class="fa-solid fa-location-dot"></i> San Pedro Sula & Tegucigalpa, Honduras
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                            Comercialización y Distribución de <span class="gradient-text">Pinturas y Ferretería</span>
+                        </h1>
+                        <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                            Somos el aliado estratégico de carpinteros, electricistas, pintores, constructores y amantes del bricolaje en todo el territorio hondureño.
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                            <button onclick="switchSection('catalogo')" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-brand-primary hover:bg-sky-600 text-white font-bold shadow-lg shadow-sky-500/25 transition-all text-sm">
+                                Ver Catálogo de Productos <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                            <button onclick="switchSection('asistente')" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold transition-all text-sm flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-microphone text-brand-accent"></i> Hablar con Asistente Virtual
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visual Hero Graphic / Banner Card -->
+                    <div class="lg:col-span-5">
+                        <div class="bg-white rounded-3xl p-6 shadow-xl border border-slate-200/80 space-y-6">
+                            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 class="font-extrabold text-slate-800 text-base">Atención Inmediata</h3>
+                                    <p class="text-xs text-slate-500">Contacta a nuestro equipo de ventas</p>
+                                </div>
+                                <span class="p-2.5 bg-emerald-50 text-emerald-600 rounded-2xl">
+                                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                                </span>
+                            </div>
+
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                ¿Necesitas una cotización directa para un proyecto de construcción o remodelación en Honduras? Chatea con nuestros asesores en tiempo real.
+                            </p>
+
+                            <a href="https://wa.me/50499999999?text=Hola%20Puerto%20Color,%20necesito%20asesoria%20para%20un%20proyecto." target="_blank" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-md">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Iniciar Chat de WhatsApp (Honduras)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-catalogo" class="view-section py-12 hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-6">
+                    <div>
+                        <span class="text-xs font-bold text-brand-primary uppercase tracking-wider bg-sky-50 px-3 py-1 rounded-full">Catálogo Comercial</span>
+                        <h2 class="text-3xl font-extrabold text-slate-900 mt-2">Pinturas, Ferretería y Materiales</h2>
+                        <p class="text-xs text-slate-500 mt-1">Precios mostrados en Lempiras (L.) - El desglose de impuestos se realiza al finalizar la compra.</p>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="relative w-full md:w-80">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="catalog-search" onkeyup="filterProducts()" placeholder="Buscar producto..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-primary focus:outline-none">
+                    </div>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="setCategoryFilter('all')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-brand-primary text-white" data-cat="all">Todos</button>
+                    <button onclick="setCategoryFilter('pinturas')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" data-cat="pinturas">Pinturas</button>
+                    <button onclick="setCategoryFilter('herramientas')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" data-cat="herramientas">Herramientas</button>
+                    <button onclick="setCategoryFilter('ferreteria')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" data-cat="ferreteria">Ferretería</button>
+                    <button onclick="setCategoryFilter('materiales')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" data-cat="materiales">Materiales</button>
+                </div>
+
+                <!-- Product Grid -->
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Dynamic Product Cards Injected Here -->
+                </div>
+
+                <!-- Interactive Paint Calculator -->
+                <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700/80 pb-4">
+                        <div>
+                            <span class="text-xs font-bold text-brand-teal uppercase tracking-wider">Calculadora de Superficie en m²</span>
+                            <h3 class="text-2xl font-extrabold text-white mt-1">¿Cuántos galones de pintura necesitas?</h3>
+                        </div>
+                        <i class="fa-solid fa-calculator text-3xl text-brand-teal"></i>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        <form onsubmit="calculatePaintForm(event)" class="lg:col-span-7 space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-300 mb-1">Alto (Metros)</label>
+                                    <input type="number" id="calc-height" step="0.1" value="2.5" min="0.5" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs font-semibold focus:outline-none focus:border-brand-teal">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-300 mb-1">Ancho Total (Metros)</label>
+                                    <input type="number" id="calc-width" step="0.1" value="6.0" min="0.5" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs font-semibold focus:outline-none focus:border-brand-teal">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-300 mb-1">Manos de Pintura</label>
+                                    <select id="calc-coats" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs font-semibold focus:outline-none">
+                                        <option value="1">1 Mano (Retoque)</option>
+                                        <option value="2" selected>2 Manos (Estándar)</option>
+                                        <option value="3">3 Manos (Cambio de tono)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase text-slate-300 mb-1">Tipo de Pared</label>
+                                    <select id="calc-surface" class="w-full px-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-xs font-semibold focus:outline-none">
+                                        <option value="lisa">Lisa / Tablayeso</option>
+                                        <option value="rugosa">Repello / Rústico (+20%)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 bg-brand-teal hover:bg-teal-600 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-calculator"></i> Calcular Galones Requeridos
+                            </button>
+                        </form>
+
+                        <div class="lg:col-span-5 bg-slate-800/80 p-5 rounded-2xl border border-slate-700 space-y-4">
+                            <div class="grid grid-cols-2 gap-3 text-center">
+                                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
+                                    <span class="text-[10px] text-slate-400 font-bold uppercase block">Área Total</span>
+                                    <span id="res-area" class="text-lg font-extrabold text-white">15.0 m²</span>
+                                </div>
+                                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
+                                    <span class="text-[10px] text-slate-400 font-bold uppercase block">Galones Req.</span>
+                                    <span id="res-gallons" class="text-lg font-extrabold text-brand-teal">1 Galón</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-2 border-t border-slate-700 text-center">
+                                <button onclick="addCalculatedPaintToCart()" class="w-full py-2.5 bg-brand-primary hover:bg-sky-600 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-plus-circle"></i> Agregar Galones al Carrito
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-asistente" class="view-section py-12 hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="text-center max-w-2xl mx-auto">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider bg-orange-50 px-3 py-1 rounded-full border border-orange-100">Inteligencia de Voz & Citas</span>
+                    <h2 class="text-3xl font-extrabold text-slate-900 mt-2">Asistente Virtual y Sala de Espera</h2>
+                    <p class="text-xs text-slate-500 mt-1">Habla con nuestro asistente interactivo para resolver tus dudas o agenda tu pedido asignando un turno en cola.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Interactive Voice & Chat Assistant Card -->
+                    <div class="lg:col-span-7 bg-white rounded-3xl p-6 shadow-xl border border-slate-200 flex flex-col justify-between min-h-[480px]">
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-2xl bg-slate-900 text-brand-accent flex items-center justify-center font-bold text-xl">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">Asistente Virtual Puerto Color</h3>
+                                    <p class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> En Línea / Escucha Activa
+                                    </p>
+                                </div>
+                            </div>
+                            <button onclick="speakText('Hola, bienvenido a Puerto Color. ¿En qué puedo ayudarte hoy?')" class="text-slate-400 hover:text-brand-primary p-2">
+                                <i class="fa-solid fa-volume-high text-lg"></i>
+                            </button>
+                        </div>
+
+                        <!-- Chat Messages Container -->
+                        <div id="chat-messages" class="flex-grow my-4 space-y-3 overflow-y-auto max-h-72 pr-2 text-xs">
+                            <div class="bg-slate-100 p-3 rounded-2xl max-w-[85%] text-slate-800 space-y-1">
+                                <p class="font-bold text-brand-primary text-[10px]">ASISTENTE</p>
+                                <p>¡Hola! Bienvenido a <strong>Puerto Color</strong>. Puedes hablar usando el micrófono o escribir para consultar precios, pinturas o agendar un turno de entrega.</p>
+                            </div>
+                        </div>
+
+                        <!-- Voice Mic and Text Controls -->
+                        <div class="pt-3 border-t border-slate-100 space-y-3">
+                            <div class="flex items-center gap-2">
+                                <button id="mic-btn" onclick="toggleVoiceRecognition()" class="p-3 bg-brand-accent hover:bg-orange-600 text-white rounded-xl shadow-md transition-all flex items-center justify-center">
+                                    <i class="fa-solid fa-microphone text-base"></i>
+                                </button>
+                                <input type="text" id="chat-input" onkeypress="handleChatKeyPress(event)" placeholder="Escribe tu mensaje o presiona el micrófono..." class="flex-grow px-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-primary focus:outline-none">
+                                <button onclick="sendChatMessage()" class="px-4 py-2.5 bg-brand-primary hover:bg-sky-600 text-white font-bold rounded-xl text-xs transition-all">
+                                    Enviar
+                                </button>
+                            </div>
+                            <p id="mic-status" class="text-[10px] text-slate-400 text-center">Presiona el micrófono para hablar con el asistente.</p>
+                        </div>
+                    </div>
+
+                    <!-- Virtual Queue / Appointment Booking Card -->
+                    <div class="lg:col-span-5 bg-slate-900 text-white rounded-3xl p-6 shadow-xl space-y-6 flex flex-col justify-between">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold text-brand-teal uppercase">Módulo de Citas & Despacho</span>
+                            <h3 class="text-xl font-extrabold text-white">Sala de Espera Virtual</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Genera un boleto de atención preferencial para retirar productos en sucursal o agendar una llamada de asesoría.
+                            </p>
+                        </div>
+
+                        <div id="queue-display" class="bg-slate-800 p-6 rounded-2xl border border-slate-700 text-center space-y-3">
+                            <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Tu Turno Asignado</span>
+                            <div id="ticket-number" class="text-4xl font-extrabold text-brand-accent">#PC-102</div>
+                            <div class="flex items-center justify-center gap-4 text-xs pt-2">
+                                <div class="bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700">
+                                    <span class="text-slate-400 block text-[10px]">Posición en Cola</span>
+                                    <span id="queue-pos" class="font-bold text-white">2 personas antes</span>
+                                </div>
+                                <div class="bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700">
+                                    <span class="text-slate-400 block text-[10px]">Tiempo Est.</span>
+                                    <span id="queue-time" class="font-bold text-brand-teal">04:30 min</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button onclick="generateNewTicket()" class="w-full py-3 bg-brand-accent hover:bg-orange-600 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/20">
+                            <i class="fa-solid fa-ticket"></i> Generar Nuevo Turno de Espera
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-proyecto" class="view-section py-12 hidden">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="bg-slate-900 text-white rounded-3xl p-8 border border-slate-800 shadow-2xl space-y-6">
+                    <div class="flex items-center gap-3 border-b border-slate-800 pb-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-primary/20 text-brand-primary flex items-center justify-center font-bold text-2xl">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 font-bold uppercase">Asignación Práctica Académica</span>
+                            <h2 class="text-2xl font-extrabold text-white">Puerto Color - Gestión Empresarial</h2>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                        <div class="space-y-3 bg-slate-800/60 p-4 rounded-2xl border border-slate-700">
+                            <div>
+                                <span class="text-slate-400 uppercase text-[10px] font-bold block">Empresa</span>
+                                <span class="text-sm font-bold text-white">Puerto Color</span>
+                                <p class="text-slate-400 italic mt-0.5">“Dale vida a tus espacios, nosotros ponemos el color.”</p>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 uppercase text-[10px] font-bold block">Docente Evaluador</span>
+                                <span class="text-sm font-bold text-sky-400">Kimberly Canelo</span>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 uppercase text-[10px] font-bold block">Materia & Sección</span>
+                                <span class="text-sm font-bold text-teal-400">Gestión Empresarial | Duodécimo "2"</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 bg-slate-800/60 p-4 rounded-2xl border border-slate-700">
+                            <span class="text-slate-400 uppercase text-[10px] font-bold block">Integrantes del Equipo</span>
+                            <ul class="space-y-2 text-slate-200 font-semibold">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-user-check text-brand-accent"></i> Cindy López</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-user-check text-brand-accent"></i> Carlos Sosa</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-user-check text-brand-accent"></i> David Alvarenga</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-950 text-slate-400 py-6 border-t border-slate-800 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:flex sm:justify-between sm:items-center space-y-3 sm:space-y-0">
+            <p>© 2026 Puerto Color. Todos los derechos reservados. Lempiras Hondureños (L.).</p>
+            <div class="flex justify-center space-x-4">
+                <a href="https://wa.me/50499999999" target="_blank" class="hover:text-emerald-400"><i class="fa-brands fa-whatsapp text-lg"></i></a>
+                <a href="#" class="hover:text-brand-primary"><i class="fa-brands fa-facebook text-lg"></i></a>
+                <a href="#" class="hover:text-brand-accent"><i class="fa-brands fa-tiktok text-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="cart-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 relative max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-sky-100 text-brand-primary flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-slate-900 text-base">Carrito y Facturación</h3>
+                        <p class="text-xs text-slate-500">Impuestos y Descuentos calculados al pagar</p>
+                    </div>
+                </div>
+                <button onclick="toggleCartModal()" class="text-slate-400 hover:text-slate-600 p-2 text-xl font-bold">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items Container -->
+            <div id="cart-items" class="space-y-3 max-h-48 overflow-y-auto pr-1">
+                <!-- Cart Items populated via JS -->
+            </div>
+
+            <!-- Discounts & Customer Input Section -->
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3 text-xs">
+                <div class="font-bold text-slate-800">Opciones de Descuento & Datos de Cliente</div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input type="text" id="cust-name" placeholder="Nombre Completo" class="px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-primary focus:outline-none">
+                    <input type="tel" id="cust-phone" placeholder="WhatsApp / Teléfono" class="px-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-brand-primary focus:outline-none">
+                </div>
+
+                <!-- Senior Citizen Discount Toggle -->
+                <div class="bg-white p-3 rounded-xl border border-slate-200 flex flex-col space-y-2">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" id="senior-discount-check" onchange="updateCartCalculations()" class="rounded text-brand-primary focus:ring-brand-primary h-4 w-4">
+                        <span class="font-bold text-slate-800">Aplicar Descuento de Tercera Edad (25%)</span>
+                    </label>
+                    <input type="text" id="senior-dni" placeholder="Número de DNI / Tarjeta de Identidad" class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs focus:outline-none">
+                </div>
+            </div>
+
+            <!-- Tax and Price Summary (Only Calculated Here) -->
+            <div class="bg-slate-900 text-white p-4 rounded-2xl space-y-2 text-xs">
+                <div class="flex justify-between text-slate-400">
+                    <span>Subtotal Productos:</span>
+                    <span id="subtotal-val" class="font-semibold text-white">L. 0.00</span>
+                </div>
+                <div id="senior-discount-row" class="flex justify-between text-emerald-400 hidden">
+                    <span>Descuento Tercera Edad (25% Ley HN):</span>
+                    <span id="discount-val">- L. 0.00</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                    <span>ISV (15% Impuesto Sobre Ventas):</span>
+                    <span id="isv-val" class="font-semibold text-white">L. 0.00</span>
+                </div>
+                <div class="flex justify-between text-slate-400">
+                    <span>Impuesto Vecinal / Tasa Municipal (1.5%):</span>
+                    <span id="tasa-val" class="font-semibold text-white">L. 0.00</span>
+                </div>
+                <div class="pt-2 border-t border-slate-800 flex justify-between font-extrabold text-sm text-white">
+                    <span>TOTAL A PAGAR:</span>
+                    <span id="total-val" class="text-brand-accent text-base">L. 0.00</span>
+                </div>
+            </div>
+
+            <!-- Payment Methods Form -->
+            <div class="space-y-3">
+                <span class="text-xs font-bold text-slate-700 uppercase block">Método de Pago</span>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <button type="button" onclick="setPaymentMethod('card')" id="pay-btn-card" class="pay-method-btn border-2 border-brand-primary bg-sky-50 text-brand-primary font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-credit-card"></i> Tarjeta Crédito/Débito
+                    </button>
+                    <button type="button" onclick="setPaymentMethod('whatsapp')" id="pay-btn-whatsapp" class="pay-method-btn border border-slate-200 bg-white text-slate-700 font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5">
+                        <i class="fa-brands fa-whatsapp text-emerald-600"></i> Pagar / WhatsApp
+                    </button>
+                </div>
+
+                <!-- Credit Card Fields -->
+                <div id="card-fields" class="space-y-2 pt-2 text-xs">
+                    <input type="text" id="card-num" placeholder="Número de Tarjeta (4000 0000 0000 0000)" maxlength="19" class="w-full px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-primary focus:outline-none">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="card-exp" placeholder="MM/AA" maxlength="5" class="px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-primary focus:outline-none">
+                        <input type="password" id="card-cvc" placeholder="CVC / CVV" maxlength="4" class="px-3 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-primary focus:outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="processFinalPayment()" class="w-full py-3.5 bg-brand-accent hover:bg-orange-600 text-white font-extrabold rounded-xl text-xs transition-all shadow-lg shadow-orange-500/25">
+                Procesar Pago / Generar Factura Oficial
+            </button>
+        </div>
+    </div>
+
+    <div id="invoice-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div class="text-center border-b border-slate-200 pb-3">
+                <h2 class="text-xl font-extrabold text-slate-900">PUERTO COLOR S. DE R.L.</h2>
+                <p class="text-[11px] text-slate-500">“Dale vida a tus espacios, nosotros ponemos el color.”</p>
+                <p class="text-[10px] text-slate-400">RTN: 08011999123456 | San Pedro Sula, Honduras</p>
+            </div>
+
+            <div class="text-xs space-y-1 text-slate-600">
+                <p><strong>Cliente:</strong> <span id="inv-cust-name">Cliente</span></p>
+                <p><strong>Teléfono:</strong> <span id="inv-cust-phone">N/A</span></p>
+                <p><strong>Fecha:</strong> <span id="inv-date">30/09/2026</span></p>
+                <p><strong>Estado Pago:</strong> <span class="text-emerald-600 font-bold">PAGADO CON TARJETA</span></p>
+            </div>
+
+            <!-- Invoice Item List -->
+            <div id="inv-items" class="border-y border-slate-200 py-3 text-xs space-y-1 max-h-36 overflow-y-auto">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Tax Breakdown -->
+            <div class="space-y-1 text-xs text-slate-600 font-medium">
+                <div class="flex justify-between"><span>Subtotal:</span><span id="inv-subtotal">L. 0.00</span></div>
+                <div id="inv-discount-row" class="flex justify-between text-emerald-600 hidden"><span>Descuento 3ra Edad (25%):</span><span id="inv-discount">- L. 0.00</span></div>
+                <div class="flex justify-between"><span>ISV (15%):</span><span id="inv-isv">L. 0.00</span></div>
+                <div class="flex justify-between"><span>Tasa Municipal (1.5%):</span><span id="inv-tasa">L. 0.00</span></div>
+                <div class="flex justify-between font-extrabold text-sm text-slate-900 pt-2 border-t border-slate-200"><span>TOTAL PAGADO:</span><span id="inv-total" class="text-brand-primary">L. 0.00</span></div>
+            </div>
+
+            <div class="flex gap-2 pt-2 no-print">
+                <button onclick="window.print()" class="flex-grow py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs">
+                    <i class="fa-solid fa-print"></i> Imprimir Factura
+                </button>
+                <button onclick="closeInvoiceModal()" class="py-2.5 px-4 bg-slate-100 text-slate-700 font-bold rounded-xl text-xs">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toast-msg" class="text-xs font-semibold">Notificación</span>
+    </div>
+
+    <script>
+        // Sample Products Database (In Lempiras L.)
+        const productsDB = [
+            { id: 1, name: "Pintura Látex Lavable Premium", category: "pinturas", price: 680.00, unit: "Galón", tag: "Exteriores / Interiores", icon: "fa-paint-roller" },
+            { id: 2, name: "Esmalte Anticorrosivo Secado Rápido", category: "pinturas", price: 820.00, unit: "Galón", tag: "Metal / Madera", icon: "fa-spray-can" },
+            { id: 3, name: "Rodillo Profesional Microfibra 9\"", category: "herramientas", price: 185.00, unit: "Unidad", tag: "Acabado Fino", icon: "fa-brush" },
+            { id: 4, name: "Set de Brochas Multiuso (3 pzas)", category: "herramientas", price: 240.00, unit: "Set", tag: "Alta Precisión", icon: "fa-paint-brush" },
+            { id: 5, name: "Sellador Acrílico Centralizado", category: "materiales", price: 520.00, unit: "Galón", tag: "Antihumedad", icon: "fa-fill" },
+            { id: 6, name: "Cinta de Enmascarar 2 pulgadas", category: "ferreteria", price: 75.00, unit: "Rollo", tag: "Protección", icon: "fa-tape" },
+            { id: 7, name: "Espátula Inoxidable 4\"", category: "ferreteria", price: 110.00, unit: "Unidad", tag: "Resistente", icon: "fa-screwdriver" },
+            { id: 8, name: "Empaste Interior / Pasta Lisa 20kg", category: "materiales", price: 390.00, unit: "Saco", tag: "Preparación", icon: "fa-cubes" }
+        ];
+
+        let cart = [];
+        let activeCategory = 'all';
+        let selectedPayMethod = 'card';
+        let isListening = false;
+        let recognition = null;
+
+        // Tab Navigation Switcher
+        function switchSection(secId) {
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(`sec-${secId}`)?.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.className = "nav-tab px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 transition-all font-semibold text-sm";
+            });
+
+            const activeTab = document.getElementById(`tab-${secId}`);
+            if (activeTab) {
+                activeTab.className = "nav-tab px-4 py-2 rounded-xl text-brand-primary bg-sky-50 font-bold transition-all text-sm";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Catalog Cards
+        function renderCatalog(items) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+
+            items.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 uppercase">${p.tag}</span>
+                            <i class="fa-solid ${p.icon} text-brand-primary"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-1">${p.name}</h4>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex items-center justify-between mt-4">
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Precio</span>
+                            <span class="text-base font-extrabold text-slate-900">L. ${p.price.toFixed(2)}</span>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="px-3 py-2 bg-brand-primary hover:bg-sky-600 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1">
+                            <i class="fa-solid fa-cart-plus"></i> Agregar
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function setCategoryFilter(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                btn.className = btn.getAttribute('data-cat') === cat 
+                    ? "cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-brand-primary text-white" 
+                    : "cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200";
+            });
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('catalog-search').value.toLowerCase();
+            const filtered = productsDB.filter(p => {
+                const matchesCat = activeCategory === 'all' || p.category === activeCategory;
+                const matchesSearch = p.name.toLowerCase().includes(query);
+                return matchesCat && matchesSearch;
+            });
+            renderCatalog(filtered);
+        }
+
+        // Paint Calculator
+        function calculatePaintForm(e) {
+            if (e) e.preventDefault();
+            const h = parseFloat(document.getElementById('calc-height').value) || 0;
+            const w = parseFloat(document.getElementById('calc-width').value) || 0;
+            const coats = parseInt(document.getElementById('calc-coats').value) || 2;
+            const surface = document.getElementById('calc-surface').value;
+
+            const area = h * w;
+            let yieldPerLiter = surface === 'rugosa' ? 8 : 10;
+            const liters = (area / yieldPerLiter) * coats;
+            const gallons = Math.ceil(liters / 3.785);
+
+            document.getElementById('res-area').innerText = `${area.toFixed(1)} m²`;
+            document.getElementById('res-gallons').innerText = `${gallons} Galó${gallons > 1 ? 'nes' : 'n'}`;
+        }
+
+        function addCalculatedPaintToCart() {
+            const galText = document.getElementById('res-gallons').innerText;
+            const qty = parseInt(galText) || 1;
+
+            const item = { id: 99, name: "Pintura Látex Personalizada (m²)", price: 680.00, qty: qty, unit: "Galón" };
+            const existing = cart.find(i => i.id === 99);
+            if (existing) existing.qty += qty;
+            else cart.push(item);
+
+            updateCartUI();
+            showToast(`Se agregaron ${qty} galón(es) calculados al carrito.`);
+        }
+
+        // Cart & Payment Calculations (Honduras ISV 15%, Tasa 1.5%, Tercera Edad 25%)
+        function addToCart(id) {
+            const prod = productsDB.find(p => p.id === id);
+            const existing = cart.find(i => i.id === id);
+            if (existing) existing.qty += 1;
+            else cart.push({ ...prod, qty: 1 });
+
+            updateCartUI();
+            showToast(`Agregado: ${prod.name}`);
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const totalQty = cart.reduce((acc, i) => acc + i.qty, 0);
+            badge.innerText = totalQty;
+
+            const container = document.getElementById('cart-items');
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-center text-xs text-slate-400 py-4">El carrito está vacío.</p>`;
+            } else {
+                cart.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs";
+                    row.innerHTML = `
+                        <div>
+                            <p class="font-bold text-slate-800">${item.name}</p>
+                            <p class="text-slate-400">L. ${item.price.toFixed(2)} x ${item.qty}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold">L. ${(item.price * item.qty).toFixed(2)}</span>
+                            <button onclick="removeFromCart(${item.id})" class="text-rose-500 hover:text-rose-700 p-1"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            updateCartCalculations();
+        }
+
+        function updateCartCalculations() {
+            const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const isSenior = document.getElementById('senior-discount-check')?.checked;
+
+            let discount = 0;
+            if (isSenior) {
+                discount = subtotal * 0.25; // 25% Senior Discount in Honduras
+                document.getElementById('senior-discount-row')?.classList.remove('hidden');
+            } else {
+                document.getElementById('senior-discount-row')?.classList.add('hidden');
+            }
+
+            const taxableAmount = subtotal - discount;
+            const isv = taxableAmount * 0.15; // 15% ISV Honduras
+            const tasaVecinal = taxableAmount * 0.015; // 1.5% Tasa Municipal
+            const total = taxableAmount + isv + tasaVecinal;
+
+            document.getElementById('subtotal-val').innerText = `L. ${subtotal.toFixed(2)}`;
+            document.getElementById('discount-val').innerText = `- L. ${discount.toFixed(2)}`;
+            document.getElementById('isv-val').innerText = `L. ${isv.toFixed(2)}`;
+            document.getElementById('tasa-val').innerText = `L. ${tasaVecinal.toFixed(2)}`;
+            document.getElementById('total-val').innerText = `L. ${total.toFixed(2)}`;
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            updateCartUI();
+        }
+
+        function toggleCartModal() {
+            document.getElementById('cart-modal').classList.toggle('hidden');
+        }
+
+        function setPaymentMethod(method) {
+            selectedPayMethod = method;
+            const cardFields = document.getElementById('card-fields');
+            if (method === 'card') {
+                cardFields.classList.remove('hidden');
+                document.getElementById('pay-btn-card').className = "border-2 border-brand-primary bg-sky-50 text-brand-primary font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5";
+                document.getElementById('pay-btn-whatsapp').className = "border border-slate-200 bg-white text-slate-700 font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5";
+            } else {
+                cardFields.classList.add('hidden');
+                document.getElementById('pay-btn-whatsapp').className = "border-2 border-emerald-500 bg-emerald-50 text-emerald-600 font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5";
+                document.getElementById('pay-btn-card').className = "border border-slate-200 bg-white text-slate-700 font-bold py-2 px-3 rounded-xl flex items-center justify-center gap-1.5";
+            }
+        }
+
+        function processFinalPayment() {
+            if (cart.length === 0) {
+                showToast("El carrito está vacío.");
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value || "Cliente Particular";
+            const phone = document.getElementById('cust-phone').value || "S/N";
+
+            if (selectedPayMethod === 'whatsapp') {
+                let msg = `Hola Puerto Color, mi nombre es *${name}*.\nQuisiera confirmar mi pedido:\n\n`;
+                cart.forEach(i => msg += `• ${i.name} (x${i.qty}) - L. ${(i.price * i.qty).toFixed(2)}\n`);
+                msg += `\n*Total a pagar con impuestos:* ${document.getElementById('total-val').innerText}`;
+                window.open(`https://wa.me/50499999999?text=${encodeURIComponent(msg)}`, '_blank');
+                toggleCartModal();
+                return;
+            }
+
+            // Generate Official Printable Invoice
+            document.getElementById('inv-cust-name').innerText = name;
+            document.getElementById('inv-cust-phone').innerText = phone;
+            document.getElementById('inv-date').innerText = new Date().toLocaleDateString('es-HN');
+
+            const invContainer = document.getElementById('inv-items');
+            invContainer.innerHTML = '';
+            cart.forEach(i => {
+                invContainer.innerHTML += `<div class="flex justify-between"><span>${i.name} (x${i.qty})</span><span>L. ${(i.price * i.qty).toFixed(2)}</span></div>`;
+            });
+
+            document.getElementById('inv-subtotal').innerText = document.getElementById('subtotal-val').innerText;
+            document.getElementById('inv-isv').innerText = document.getElementById('isv-val').innerText;
+            document.getElementById('inv-tasa').innerText = document.getElementById('tasa-val').innerText;
+            document.getElementById('inv-total').innerText = document.getElementById('total-val').innerText;
+
+            const isSenior = document.getElementById('senior-discount-check').checked;
+            if(isSenior) {
+                document.getElementById('inv-discount-row').classList.remove('hidden');
+                document.getElementById('inv-discount').innerText = document.getElementById('discount-val').innerText;
+            } else {
+                document.getElementById('inv-discount-row').classList.add('hidden');
+            }
+
+            toggleCartModal();
+            document.getElementById('invoice-modal').classList.remove('hidden');
+            speakText(`Gracias por su compra en Puerto Color ${name}. Su pago ha sido procesado exitosamente.`);
+            cart = [];
+            updateCartUI();
+        }
+
+        function closeInvoiceModal() {
+            document.getElementById('invoice-modal').classList.add('hidden');
+        }
+
+        // Voice Assistant & Web Speech API
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleVoiceRecognition() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                showToast("Tu navegador no soporta reconocimiento de voz por micrófono.");
+                return;
+            }
+
+            const MicClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!recognition) {
+                recognition = new MicClass();
+                recognition.lang = 'es-HN';
+                recognition.continuous = false;
+
+                recognition.onstart = function() {
+                    isListening = true;
+                    document.getElementById('mic-btn').classList.add('pulse-mic', 'bg-red-500');
+                    document.getElementById('mic-status').innerText = "Escuchando... Habla ahora.";
+                };
+
+                recognition.onresult = function(e) {
+                    const text = e.results[0][0].transcript;
+                    document.getElementById('chat-input').value = text;
+                    sendChatMessage();
+                };
+
+                recognition.onend = function() {
+                    isListening = false;
+                    document.getElementById('mic-btn').classList.remove('pulse-mic', 'bg-red-500');
+                    document.getElementById('mic-status').innerText = "Presiona el micrófono para hablar.";
+                };
+            }
+
+            if (isListening) recognition.stop();
+            else recognition.start();
+        }
+
+        function handleChatKeyPress(e) {
+            if (e.key === 'Enter') sendChatMessage();
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const query = input.value.trim();
+            if (!query) return;
+
+            const chat = document.getElementById('chat-messages');
+            chat.innerHTML += `
+                <div class="bg-brand-primary text-white p-3 rounded-2xl max-w-[85%] ml-auto space-y-1">
+                    <p class="font-bold text-[10px] text-sky-200">TÚ</p>
+                    <p>${query}</p>
+                </div>
+            `;
+
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+
+            // Assistant Response Engine
+            setTimeout(() => {
+                let response = "En Puerto Color disponemos de una amplia gama de pinturas lavables, anticorrosivas e insumos ferreteros en San Pedro Sula y Tegucigalpa.";
+                const q = query.toLowerCase();
+
+                if (q.includes('precio') || q.includes('cuanto cuesta') || q.includes('lempira')) {
+                    response = "Nuestros precios están expresados en Lempiras (L.). La pintura látex lavable premium cuesta L. 680.00 el galón y el anticorrosivo L. 820.00.";
+                } else if (q.includes('descuento') || q.includes('tercera edad') || q.includes('adulto mayor')) {
+                    response = "Aplicamos el 25% de descuento por la Ley de la Tercera Edad en Honduras ingresando tu DNI al momento de pagar en el carrito.";
+                } else if (q.includes('turno') || q.includes('cita') || q.includes('espera')) {
+                    response = "Puedes presionar el botón 'Generar Nuevo Turno' en el panel contiguo para agendar tu pedido de retiro.";
+                }
+
+                chat.innerHTML += `
+                    <div class="bg-slate-100 p-3 rounded-2xl max-w-[85%] text-slate-800 space-y-1">
+                        <p class="font-bold text-brand-primary text-[10px]">ASISTENTE</p>
+                        <p>${response}</p>
+                    </div>
+                `;
+                chat.scrollTop = chat.scrollHeight;
+                speakText(response);
+            }, 600);
+        }
+
+        // Virtual Queue Generator
+        function generateNewTicket() {
+            const randomNum = Math.floor(Math.random() * 50) + 100;
+            const ticket = `#PC-${randomNum}`;
+            document.getElementById('ticket-number').innerText = ticket;
+            document.getElementById('queue-pos').innerText = "1 persona antes";
+            document.getElementById('queue-time').innerText = "02:15 min";
+            showToast(`Turno asignado: ${ticket}`);
+            speakText(`Su turno asignado es ${ticket}. Estará listo en un momento.`);
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        window.onload = function() {
+            renderCatalog(productsDB);
+            calculatePaintForm(null);
+            updateCartUI();
+        };
+    </script>
+</body>
+</html>
